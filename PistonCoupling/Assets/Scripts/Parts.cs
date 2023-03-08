@@ -5,40 +5,37 @@ using UnityEngine;
 public abstract class Parts : MonoBehaviour
 {
     [SerializeField]
-    private Camera mainCam;
+    private float rotateSensivity=.5f;
+    private Vector2 turn;
+    private bool isRotate=false;
+    private Vector3 mOffSet;
+    private float mZCoord;
 
-    [SerializeField]
-    private LayerMask layerMask;
-
-    [SerializeField]
-    private InteractiveController interactiveController;
-
-
-    private bool isMontaged=false;
-    public bool IsMontaged { get
+    public bool IsRotate{ get{return isRotate;} set{isRotate=value;} }
+    private void OnMouseDown() 
     {
-        return isMontaged;
-    } 
-    set
-    {
-        isMontaged=value;
-    } }
-    public void MovedByMousePos()
-    {
-        Ray ray=mainCam.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(ray,out RaycastHit raycastHit))
-        {
-            transform.position=raycastHit.point;
-        }
-        
+        mZCoord=Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
+        mOffSet=gameObject.transform.position-GetMouseWorldPos();
     }
 
-    public void Update() 
+    private void OnMouseDrag() 
     {
-        if(interactiveController.IsInteractive)
-        {
-            MovedByMousePos();
-        }
+        transform.position=GetMouseWorldPos()+mOffSet;
+    }
+
+    private Vector3 GetMouseWorldPos()
+    {
+        Vector3 mousePoint=Input.mousePosition;
+        mousePoint.z=mZCoord;
+        return Camera.main.ScreenToWorldPoint(mousePoint);
+    }
+
+    public void RotateByMouse() 
+    {
+        turn.x+=Input.GetAxis("Mouse X")*rotateSensivity;
+        turn.y+=Input.GetAxis("Mouse Y")*rotateSensivity;
+        transform.localRotation=Quaternion.Euler(turn.y,-turn.x,0);
+        
     }
 
 
