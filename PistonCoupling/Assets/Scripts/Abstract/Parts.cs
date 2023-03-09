@@ -21,6 +21,7 @@ public abstract class Parts : MonoBehaviour
 
     private Vector2 turn;
     private bool isRotate=false;
+    private bool inSide=false;
     private Vector3 mOffSet;
     private float mZCoord;
     private Transform startParent;
@@ -31,6 +32,13 @@ public abstract class Parts : MonoBehaviour
     private void Start() 
     {
         startParent=transform.parent;
+    }
+
+    private void Update() {
+        if(Input.GetMouseButtonUp(0))
+        {
+            Debug.Log("uppp");
+        }
     }
     private void OnMouseDown() 
     {
@@ -43,9 +51,23 @@ public abstract class Parts : MonoBehaviour
         if(transform.parent=parent)
         {
             transform.parent=startParent;
+            targetTransform.GetComponent<BoxCollider>().enabled=true;
         }
         transform.position=GetMouseWorldPos()+mOffSet;
         
+    }
+    private void OnMouseUp() 
+    {
+        if( montageNumber>=montageController.CurrentMontageCount && inSide)
+        {
+            parent=targetTransform;
+            Debug.Log("montage");
+            montageController.CurrentMontageCount=montageNumber;
+            MoveTargetWithAnimation();
+            targetTransform.GetChild(0).gameObject.SetActive(false);
+            targetTransform.GetComponent<BoxCollider>().enabled=false;
+
+        }
     }
 
     private Vector3 GetMouseWorldPos()
@@ -65,25 +87,17 @@ public abstract class Parts : MonoBehaviour
 
     public virtual void MoveTargetWithAnimation()
     {
-        transform.SetParent(parent);
-        LeanTween.moveLocal(gameObject,Vector3.zero,2f).setEaseLinear();
+        transform.SetParent(targetTransform);
+        transform.LeanMoveLocal(Vector3.zero,2f);
     }
 
     private void OnTriggerStay(Collider other) 
     {
         
-        if(other.gameObject.name==targetTransform.name && transform.parent!=parent)
+        if(other.gameObject.name==targetTransform.name && transform.parent!=targetTransform)
         {
             other.transform.GetChild(0).gameObject.SetActive(true);
-            Debug.Log("asd");
-            if(Input.GetMouseButtonUp(0) && montageNumber>=montageController.CurrentMontageCount )
-            {
-                Debug.Log("montage");
-                montageController.CurrentMontageCount=montageNumber;
-                MoveTargetWithAnimation();
-                other.transform.GetChild(0).gameObject.SetActive(false);
-
-            }
+            inSide=true;
         }
     }
 
@@ -92,6 +106,7 @@ public abstract class Parts : MonoBehaviour
         if(other.gameObject.name==targetTransform.name)
         {
             other.transform.GetChild(0).gameObject.SetActive(false);
+            inSide=false;
         }
     }
 
