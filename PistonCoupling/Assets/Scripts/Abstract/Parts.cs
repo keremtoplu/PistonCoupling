@@ -5,19 +5,11 @@ using UnityEngine;
 public abstract class Parts : MonoBehaviour
 {
     [SerializeField]
-    private float rotateSensivity=.5f;
-
-    [SerializeField]
-    private Transform targetTransform;
-
-    [SerializeField]
-    private MontageController montageController;
+    private float rotateSensivity=.5f; 
+    public Transform targetTransform;
 
     [SerializeField]
     private int montageNumber;
-
-    [SerializeField]
-    private Transform parent;
 
     private Vector2 turn;
     private bool isRotate=false;
@@ -32,6 +24,9 @@ public abstract class Parts : MonoBehaviour
     private void Start() 
     {
         startParent=transform.parent;
+        // targetTransform.GetChild(0).gameObject.SetActive(false);
+        // targetTransform.GetChild(1).gameObject.SetActive(false);
+
     }
 
     private void Update() {
@@ -48,8 +43,16 @@ public abstract class Parts : MonoBehaviour
 
     private void OnMouseDrag() 
     {
-        if(transform.parent=parent)
+        if(transform.parent=targetTransform)
         {
+            // if(montageNumber%10==0)
+            // {
+            //     MontageController.Instance.LastBMontagePartsCount-=10;
+            // }
+            // else
+            // {
+            //     MontageController.Instance.LastAMontagePartsCount--;
+            // }
             transform.parent=startParent;
             targetTransform.GetComponent<BoxCollider>().enabled=true;
         }
@@ -58,11 +61,10 @@ public abstract class Parts : MonoBehaviour
     }
     private void OnMouseUp() 
     {
-        if( montageNumber>=montageController.CurrentMontageCount && inSide)
+        if(inSide)
         {
-            parent=targetTransform;
             Debug.Log("montage");
-            montageController.CurrentMontageCount=montageNumber;
+            MontageController.Instance.CurrentMontageCount++;
             MoveTargetWithAnimation();
             targetTransform.GetChild(0).gameObject.SetActive(false);
             targetTransform.GetComponent<BoxCollider>().enabled=false;
@@ -96,8 +98,37 @@ public abstract class Parts : MonoBehaviour
         
         if(other.gameObject.name==targetTransform.name && transform.parent!=targetTransform)
         {
-            other.transform.GetChild(0).gameObject.SetActive(true);
-            inSide=true;
+            if(montageNumber%10==0)
+            {
+                if(montageNumber<=MontageController.Instance.LastBMontagePartsCount||montageNumber==MontageController.Instance.LastBMontagePartsCount+10)
+                {
+                    other.transform.GetChild(0).gameObject.SetActive(true);
+                    MontageController.Instance.LastBMontagePartsCount=montageNumber;
+                    inSide=true;
+
+                }
+                else
+                {
+                    other.transform.GetChild(1).gameObject.SetActive(true);
+                }
+
+            }
+            else 
+            {
+                if (montageNumber==MontageController.Instance.LastAMontagePartsCount||montageNumber==MontageController.Instance.LastAMontagePartsCount+1)
+                {
+                    other.transform.GetChild(0).gameObject.SetActive(true);
+                    MontageController.Instance.LastAMontagePartsCount=montageNumber;
+                    inSide=true;
+                }
+                else
+                {
+                    other.transform.GetChild(1).gameObject.SetActive(true);
+                    inSide=false;
+                }
+               
+
+            }
         }
     }
 
@@ -106,6 +137,7 @@ public abstract class Parts : MonoBehaviour
         if(other.gameObject.name==targetTransform.name)
         {
             other.transform.GetChild(0).gameObject.SetActive(false);
+            other.transform.GetChild(1).gameObject.SetActive(false);
             inSide=false;
         }
     }
