@@ -13,6 +13,7 @@ public class InteractiveController : MonoBehaviour
     
     public bool RotateActive=>rotateActive;
 
+
     void Start()
     {
         cameraMovement=mainCam.GetComponent<CameraMovement>();
@@ -38,7 +39,7 @@ public class InteractiveController : MonoBehaviour
         {
             rotateActive=false;
         }
-        if(rotateActive && !cameraMovement.IsRotateActive)
+        if(rotateActive && !cameraMovement.IsRotateActive && _parts.transform.parent==_parts.StartParent)
         {
             _parts.RotateByMouse();
         }

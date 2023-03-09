@@ -2466,6 +2466,7 @@ MonoBehaviour:
   targetTransform: {fileID: 213133501}
   montageController: {fileID: 151878584}
   montageNumber: 2
+  parent: {fileID: 5586476273730644552}
 --- !u!65 &4535001865750666809
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2540,6 +2541,7 @@ MonoBehaviour:
   targetTransform: {fileID: 2107189188}
   montageController: {fileID: 151878584}
   montageNumber: 7
+  parent: {fileID: 5586476273730644552}
 --- !u!65 &4762249286086539746
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2593,6 +2595,7 @@ MonoBehaviour:
   targetTransform: {fileID: 1658294501}
   montageController: {fileID: 151878584}
   montageNumber: 3
+  parent: {fileID: 5586476273730644552}
 --- !u!65 &4977926657854462791
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2735,6 +2738,7 @@ MonoBehaviour:
   targetTransform: {fileID: 1831986857}
   montageController: {fileID: 151878584}
   montageNumber: 7
+  parent: {fileID: 5586476273730644552}
 --- !u!65 &6011980241119220090
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2822,6 +2826,7 @@ MonoBehaviour:
   targetTransform: {fileID: 442687644}
   montageController: {fileID: 151878584}
   montageNumber: 3
+  parent: {fileID: 5586476273730644552}
 --- !u!65 &6096029122073200331
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2882,6 +2887,7 @@ MonoBehaviour:
   targetTransform: {fileID: 841201923}
   montageController: {fileID: 151878584}
   montageNumber: 5
+  parent: {fileID: 5586476273730644552}
 --- !u!65 &6616238280234279489
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3024,6 +3030,7 @@ MonoBehaviour:
   targetTransform: {fileID: 1447301841}
   montageController: {fileID: 151878584}
   montageNumber: 1
+  parent: {fileID: 1447301841}
 --- !u!54 &7268082441592827604
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3077,6 +3084,7 @@ MonoBehaviour:
   targetTransform: {fileID: 1346699525}
   montageController: {fileID: 151878584}
   montageNumber: 4
+  parent: {fileID: 5586476273730644552}
 --- !u!65 &7495139219710009550
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3143,6 +3151,7 @@ MonoBehaviour:
   targetTransform: {fileID: 375235633}
   montageController: {fileID: 151878584}
   montageNumber: 0
+  parent: {fileID: 941987802142725666}
 --- !u!65 &8463990654008134368
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3230,6 +3239,7 @@ MonoBehaviour:
   targetTransform: {fileID: 1945304617}
   montageController: {fileID: 151878584}
   montageNumber: 6
+  parent: {fileID: 5586476273730644552}
 --- !u!65 &9137780896017308955
 BoxCollider:
   m_ObjectHideFlags: 0

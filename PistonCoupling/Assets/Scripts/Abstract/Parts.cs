@@ -16,12 +16,22 @@ public abstract class Parts : MonoBehaviour
     [SerializeField]
     private int montageNumber;
 
+    [SerializeField]
+    private Transform parent;
+
     private Vector2 turn;
     private bool isRotate=false;
     private Vector3 mOffSet;
     private float mZCoord;
+    private Transform startParent;
 
+    public Transform StartParent=>startParent;
     public bool IsRotate{ get{return isRotate;} set{isRotate=value;} }
+
+    private void Start() 
+    {
+        startParent=transform.parent;
+    }
     private void OnMouseDown() 
     {
         mZCoord=Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
@@ -30,6 +40,10 @@ public abstract class Parts : MonoBehaviour
 
     private void OnMouseDrag() 
     {
+        if(transform.parent=parent)
+        {
+            transform.parent=startParent;
+        }
         transform.position=GetMouseWorldPos()+mOffSet;
         
     }
@@ -51,13 +65,14 @@ public abstract class Parts : MonoBehaviour
 
     public virtual void MoveTargetWithAnimation()
     {
-        LeanTween.moveLocal(gameObject,targetTransform.position,2f).setEaseLinear();
+        transform.SetParent(parent);
+        LeanTween.moveLocal(gameObject,Vector3.zero,2f).setEaseLinear();
     }
 
     private void OnTriggerStay(Collider other) 
     {
         
-        if(other.gameObject.name==targetTransform.name)
+        if(other.gameObject.name==targetTransform.name && transform.parent!=parent)
         {
             other.transform.GetChild(0).gameObject.SetActive(true);
             Debug.Log("asd");
