@@ -19,14 +19,23 @@ public class CameraMovement : MonoBehaviour
     private Camera cam;
     private float rotationY;
     private float rotationX;
+    private Vector3 startPos;
+    private Quaternion startRot;
 
     private bool isRotateActive=false;
 
     public bool IsRotateActive=>isRotateActive;
 
+    private void Awake() 
+    {
+        MontageController.Instance.MontageStarted+=OnMontageStarted;
+    
+    }
     private void Start() 
     {
         cam=Camera.main;
+        startPos=cam.transform.position; 
+        startRot=cam.transform.rotation;  
     }
 
    private void Update()
@@ -55,10 +64,14 @@ public class CameraMovement : MonoBehaviour
         }
 
         
-        cam.fieldOfView-=Input.GetAxis("Mouse ScrollWheel")* zoom;  
-
-         
+        cam.fieldOfView-=Input.GetAxis("Mouse ScrollWheel")* zoom;       
    
+   }
+
+   private void OnMontageStarted()
+   {
+        cam.transform.position=startPos;
+        cam.transform.rotation=startRot;
    }
 
 }

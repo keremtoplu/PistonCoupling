@@ -24,13 +24,6 @@ public class UIController : MonoBehaviour
         MainGame.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-
 
     public void StartTheGame()
     {   

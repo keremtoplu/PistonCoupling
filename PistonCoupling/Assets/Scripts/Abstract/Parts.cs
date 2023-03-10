@@ -39,12 +39,10 @@ public abstract class Parts : MonoBehaviour
     }
     private void OnMouseDown() 
     {
-        Debug.Log("tıktık");
         mZCoord=Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
         mOffSet=gameObject.transform.position-GetMouseWorldPos();
         if(transform.parent==targetTransform)
         {
-            Debug.Log("dışarıdayım");
             
             if(montageNumber%10==0 && MontageController.Instance.LastBMontagePartsCount>montageNumber)
             {
@@ -58,9 +56,6 @@ public abstract class Parts : MonoBehaviour
             transform.parent=startParent;
             MontageController.Instance.CurrentMontageCount--;
             inSide=false;
-            Debug.Log(MontageController.Instance.LastBMontagePartsCount);
-            Debug.Log(MontageController.Instance.LastAMontagePartsCount);
-            Debug.Log(MontageController.Instance.CurrentMontageCount);
         }
     }
 
@@ -74,13 +69,11 @@ public abstract class Parts : MonoBehaviour
     {
         if(inSide)
         {
-            Debug.Log("montage");
             targetTransform.GetComponent<BoxCollider>().enabled=false;
             MoveTargetWithAnimation();
             targetTransform.GetChild(0).gameObject.SetActive(false);
             inSide=false;
             MontageController.Instance.CurrentMontageCount++;
-            Debug.Log(MontageController.Instance.CurrentMontageCount);
 
             
            
@@ -113,7 +106,6 @@ public abstract class Parts : MonoBehaviour
         transform.SetParent(targetTransform);
         transform.LeanMoveLocal(Vector3.zero,4f);
         
-        Debug.Log("move");
     }
     
     private void OnTriggerStay(Collider other) 
@@ -128,7 +120,6 @@ public abstract class Parts : MonoBehaviour
                     other.transform.GetChild(0).gameObject.SetActive(true);
                     MontageController.Instance.LastBMontagePartsCount=montageNumber;
                     inSide=true;
-                    Debug.Log("%10");
                   
 
                 }
@@ -146,7 +137,6 @@ public abstract class Parts : MonoBehaviour
                     other.transform.GetChild(0).gameObject.SetActive(true);
                     MontageController.Instance.LastAMontagePartsCount=montageNumber;
                     inSide=true;
-                    Debug.Log("%3");
                 }
                 else
                 {
