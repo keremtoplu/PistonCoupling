@@ -17,45 +17,56 @@ public abstract class Parts : MonoBehaviour
     private Vector3 mOffSet;
     private float mZCoord;
     private Transform startParent;
-
+    private Vector3 startPos;
     public Transform StartParent=>startParent;
+
+    private int test=0;
     public bool IsRotate{ get{return isRotate;} set{isRotate=value;} }
 
+    private void Awake() 
+    {
+        MontageController.Instance.MontageStarted+=OnMontageStarted;    
+    }
     private void Start() 
     {
         startParent=transform.parent;
-        // targetTransform.GetChild(0).gameObject.SetActive(false);
-        // targetTransform.GetChild(1).gameObject.SetActive(false);
+        startPos=transform.position;
 
     }
 
     private void Update() {
-        if(Input.GetMouseButtonUp(0))
-        {
-            Debug.Log("uppp");
-        }
+        
     }
     private void OnMouseDown() 
     {
+        Debug.Log("tıktık");
         mZCoord=Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
         mOffSet=gameObject.transform.position-GetMouseWorldPos();
+        if(transform.parent==targetTransform)
+        {
+            Debug.Log("dışarıdayım");
+            
+            if(montageNumber%10==0 && MontageController.Instance.LastBMontagePartsCount>montageNumber)
+            {
+                MontageController.Instance.LastBMontagePartsCount=montageNumber-10;
+                Debug.Log("%10'a");
+            }
+            else if(MontageController.Instance.LastAMontagePartsCount>montageNumber)
+            {
+                MontageController.Instance.LastAMontagePartsCount=montageNumber-1;
+            }
+            transform.parent=startParent;
+            MontageController.Instance.CurrentMontageCount--;
+            inSide=false;
+            Debug.Log(MontageController.Instance.LastBMontagePartsCount);
+            Debug.Log(MontageController.Instance.LastAMontagePartsCount);
+            Debug.Log(MontageController.Instance.CurrentMontageCount);
+        }
     }
 
     private void OnMouseDrag() 
     {
-        if(transform.parent=targetTransform)
-        {
-            // if(montageNumber%10==0)
-            // {
-            //     MontageController.Instance.LastBMontagePartsCount-=10;
-            // }
-            // else
-            // {
-            //     MontageController.Instance.LastAMontagePartsCount--;
-            // }
-            transform.parent=startParent;
-            targetTransform.GetComponent<BoxCollider>().enabled=true;
-        }
+        
         transform.position=GetMouseWorldPos()+mOffSet;
         
     }
@@ -64,12 +75,22 @@ public abstract class Parts : MonoBehaviour
         if(inSide)
         {
             Debug.Log("montage");
-            MontageController.Instance.CurrentMontageCount++;
+            targetTransform.GetComponent<BoxCollider>().enabled=false;
             MoveTargetWithAnimation();
             targetTransform.GetChild(0).gameObject.SetActive(false);
-            targetTransform.GetComponent<BoxCollider>().enabled=false;
+            inSide=false;
+            MontageController.Instance.CurrentMontageCount++;
+            Debug.Log(MontageController.Instance.CurrentMontageCount);
 
+            
+           
         }
+        else
+        {
+            
+            targetTransform.GetComponent<BoxCollider>().enabled=true;
+        }
+    
     }
 
     private Vector3 GetMouseWorldPos()
@@ -90,9 +111,11 @@ public abstract class Parts : MonoBehaviour
     public virtual void MoveTargetWithAnimation()
     {
         transform.SetParent(targetTransform);
-        transform.LeanMoveLocal(Vector3.zero,2f);
+        transform.LeanMoveLocal(Vector3.zero,4f);
+        
+        Debug.Log("move");
     }
-
+    
     private void OnTriggerStay(Collider other) 
     {
         
@@ -105,21 +128,25 @@ public abstract class Parts : MonoBehaviour
                     other.transform.GetChild(0).gameObject.SetActive(true);
                     MontageController.Instance.LastBMontagePartsCount=montageNumber;
                     inSide=true;
+                    Debug.Log("%10");
+                  
 
                 }
                 else
                 {
                     other.transform.GetChild(1).gameObject.SetActive(true);
+                    inSide=false;
                 }
 
             }
             else 
             {
-                if (montageNumber==MontageController.Instance.LastAMontagePartsCount||montageNumber==MontageController.Instance.LastAMontagePartsCount+1)
+                if (montageNumber<=MontageController.Instance.LastAMontagePartsCount||montageNumber==MontageController.Instance.LastAMontagePartsCount+1)
                 {
                     other.transform.GetChild(0).gameObject.SetActive(true);
                     MontageController.Instance.LastAMontagePartsCount=montageNumber;
                     inSide=true;
+                    Debug.Log("%3");
                 }
                 else
                 {
@@ -139,7 +166,16 @@ public abstract class Parts : MonoBehaviour
             other.transform.GetChild(0).gameObject.SetActive(false);
             other.transform.GetChild(1).gameObject.SetActive(false);
             inSide=false;
+            
+            
         }
+        
+    }
+
+    private void OnMontageStarted()
+    {
+        transform.SetParent(startParent);
+        transform.position=startPos;
     }
 
 }

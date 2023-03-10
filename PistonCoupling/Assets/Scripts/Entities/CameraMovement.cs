@@ -48,7 +48,7 @@ public class CameraMovement : MonoBehaviour
 
             rotationX+=mouseX;
             rotationY+=mouseY;
-            rotationX=Mathf.Clamp(rotationX,-40,40);
+            rotationX=Mathf.Clamp(rotationX,-80,80);
 
             transform.localEulerAngles=new Vector3(rotationX,rotationY,0);
             transform.position=_target.position-transform.forward*distanceFromTarget;
